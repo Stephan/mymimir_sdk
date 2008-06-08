@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flexLibProperties version="1">
+<includeClasses>
+<classEntry path="org.mymimir.sdk.IWikiPage"/>
+<classEntry path="org.mymimir.sdk.MYMError"/>
+<classEntry path="org.mymimir.sdk.IURLHandler"/>
+<classEntry path="org.mymimir.sdk.Views.MYMViewModule"/>
+<classEntry path="org.mymimir.sdk.Views.IMYMViewModule"/>
+<classEntry path="org.mymimir.sdk.Views.IMYMView"/>
+<classEntry path="org.mymimir.sdk.IWiki"/>
+<classEntry path="org.mymimir.sdk.Components.Dialogs.MYMDialogMessage"/>
+<classEntry path="org.mymimir.sdk.SDK"/>
+<classEntry path="org.mymimir.sdk.Events"/>
+<classEntry path="org.mymimir.sdk.ConverterFactory"/>
+<classEntry path="org.mymimir.sdk.URLHandlerManager"/>
+<classEntry path="org.mymimir.sdk.ConvFunctionHandlerManager"/>
+<classEntry path="org.mymimir.sdk.MYMMessage"/>
+<classEntry path="org.mymimir.sdk.ModuleManager"/>
+<classEntry path="org.mymimir.sdk.IWikiBackend"/>
+<classEntry path="org.mymimir.sdk.URLHandler"/>
+<classEntry path="org.mymimir.sdk.IViewFunctionHandler"/>
+<classEntry path="org.mymimir.sdk.Modules.IMYMModule"/>
+<classEntry path="org.mymimir.sdk.Tools"/>
+<classEntry path="org.mymimir.sdk.IConvFunctionHandler"/>
+<classEntry path="org.mymimir.sdk.ViewFunctionHandlerManager"/>
+<classEntry path="org.mymimir.sdk.Components.ViewSetupInterface"/>
+<classEntry path="org.mymimir.sdk.WikiPageEvent"/>
+<classEntry path="org.mymimir.sdk.IApplication"/>
+<classEntry path="org.mymimir.sdk.Components.Dialogs.MYMDialog"/>
+<classEntry path="org.mymimir.sdk.Protocols"/>
+<classEntry path="org.mymimir.sdk.IConverter"/>
+<classEntry path="org.mymimir.sdk.Components.Dialogs.MYMDialogError"/>
+<classEntry path="org.mymimir.sdk.Views.MYMView"/>
+<classEntry path="org.mymimir.sdk.Modules.MYMModule"/>
+<classEntry path="org.mymimir.sdk.Components.UndoableTextArea"/>
+</includeClasses>
+<includeResources/>
+<namespaceManifests/>
+</flexLibProperties>

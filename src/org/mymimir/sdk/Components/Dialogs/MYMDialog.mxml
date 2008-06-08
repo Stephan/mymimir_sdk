@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Panel xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			public function popUpModal(parent:DisplayObject):void
+			{
+				mx.managers.PopUpManager.addPopUp(this, parent, true);
+				mx.managers.PopUpManager.centerPopUp(this);
+			}
+			
+			public function close():void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+		]]>
+	</mx:Script>
+	
+</mx:Panel>

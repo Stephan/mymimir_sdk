@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TextArea xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()">
+	
+			<mx:Script>
+			<![CDATA[
+				private var _undoHistory:Array = new Array();
+				private var _undoFuture:Array = new Array();
+				private var _undoCurrent:Object;
+				private var _undoTimer:Timer = new Timer(1000, 0);
+				
+				private var zKey:int;
+				private var yKey:int;
+
+
+				private function init():void
+				{
+					this.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);	
+					this.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+					this._undoTimer.addEventListener(flash.events.TimerEvent.TIMER, this.onUndoTimer);
+
+					var x:String = "zy";
+					
+					zKey = x.charCodeAt(0);
+					yKey = x.charCodeAt(1); 
+					
+					this.addUndoLevel();
+				}
+
+
+				private function onKeyDown(ev:flash.events.KeyboardEvent):void
+				{
+					this._undoTimer.reset();
+					this._undoTimer.start();
+
+					switch (ev.charCode)
+					{
+						case zKey:
+							if ((ev.ctrlKey) || (ev.commandKey))
+							{
+								this.undo();
+								ev.preventDefault();
+							}
+							break;
+							
+						case yKey:
+							if ((ev.ctrlKey) || (ev.commandKey))
+							{
+								this.redo();
+								ev.preventDefault();
+							}
+							break;
+					}
+
+					switch (ev.keyCode)
+					{
+							
+						case Keyboard.TAB:
+							this.insertTextAtSel("\t");
+							ev.preventDefault();
+							break;
+							
+					}
+					
+				}
+
+
+				private function onKeyUp(ev:KeyboardEvent):void
+				{
+					switch (ev.keyCode)
+					{
+							
+						case Keyboard.TAB:
+							ev.preventDefault();
+							break;
+							
+					}
+					
+				}
+
+				public function insertTextAtSel(inText:String):void
+				{
+					this.addUndoLevel();
+		
+					var intCursorLocation : int = this.selectionBeginIndex;
+		
+					var strFirstHalf : String = this.text.substr(0, intCursorLocation);
+					var strSecondHalf : String = this.text.substr(intCursorLocation, this.text.length);
+		
+					super.text = strFirstHalf + inText + strSecondHalf;
+					this.setSelection((intCursorLocation + inText.length), (intCursorLocation + inText.length));		
+				}
+
+
+				private function onUndoTimer(ev:Event):void
+				{
+					this.addUndoLevel();
+					this._undoTimer.reset();			
+				}
+
+				private function makeUndoObject():Object
+				{
+					var uO:Object = new Object;
+					
+		 			uO.text = this.text;
+		 			uO.selBegin = this.selectionBeginIndex;
+		 			uO.selEnd = this.selectionEndIndex;
+		 			
+		 			return uO;			
+				}
+				
+				private function processUndoObject(uO:Object):void
+				{
+					super.text = uO.text;
+					this.selectionBeginIndex = uO.selBegin;
+					this.selectionEndIndex = uO.selEnd;
+				}
+				
+				
+		 		public function addUndoLevel():void
+		 		{
+		 			trace("UndoLevel");
+		 			if (_undoHistory.length)
+		 			{
+		 				var uO:Object = this._undoHistory.pop();
+		 				if ((uO) && (uO.text != this._undoCurrent.text))
+		 				{
+		 					this._undoHistory.push(uO);
+		 					trace("\tKeep last");	
+		 				}
+		 			}
+		 			this._undoHistory.push(this._undoCurrent);
+		 			this._undoCurrent = this.makeUndoObject();			
+		 			_undoFuture = new Array();
+		 		}	
+		 		
+		 		private function undo():void
+		 		{
+					if (!this._undoHistory.length) return;
+					this._undoFuture.push(this._undoCurrent);
+					this._undoCurrent = this._undoHistory.pop();
+					this.processUndoObject(this._undoCurrent);	
+					this._undoTimer.reset();
+		 		}
+		 		
+		 		private function redo():void
+				{
+					if (!_undoFuture.length) return;
+					this._undoHistory.push(this._undoCurrent);
+					this._undoCurrent = this._undoFuture.pop();
+					this.processUndoObject(this._undoCurrent);
+				}		
+
+
+				private function getCharPos(index:int):Point
+				{
+					var ret:Point = new Point;
+					var tM:TextLineMetrics = this.measureText("Q");			
+					var charRect:Rectangle = this.textField.getCharBoundaries(index);
+					
+					if (charRect)			
+					{
+						ret.y = charRect.y;
+						ret.x = charRect.right + 10;
+					}
+					else
+					{
+						ret.x = tM.width;
+						var ar:Array = this.text.substr(0, this.selectionBeginIndex).match(new RegExp("\\r", "g"));
+						ret.y = (tM.height + 2) * ar.length;
+					}
+					
+					return ret;
+				}
+
+				public function getCharBoundaries(charIndex:int):Rectangle
+				{
+					return this.textField.getCharBoundaries(charIndex);
+				}
+				
+			]]>
+		</mx:Script>
+
+	
+	
+</mx:TextArea>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MYMDialog xmlns="org.mymimir.sdk.Components.Dialogs.*" xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<mx:VBox bottom="10" top="10" left="10" right="10">
+		<mx:Text id="text" text="{_text}" fontSize="12"/>
+		<mx:HRule width="100%"/>
+		<mx:HBox id="buttons" width="100%"  horizontalAlign="right" creationComplete="addButtons()">
+		</mx:HBox>
+	</mx:VBox>
+	
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Button;
+			import mx.controls.HRule;
+			import mx.controls.Text;
+			import mx.containers.VBox;
+			
+			
+			private var _btns:Array = new Array();
+			private var _cb1:Function;
+			private var _cb2:Function;
+			[Bindable] private var _text:String;
+			
+			
+			private function onClickBtn1(ev:Event):void
+			{
+				if (_cb1 != null) _cb1.call(this, this);
+				else this.close();
+			}
+
+			private function onClickBtn2(ev:Event):void
+			{
+				if (_cb2 != null) _cb2.call(this, this);
+				else this.close();
+			}
+			
+			
+			public function initOk(title:String, message:String, btnCB:Function):void
+			{
+				this.title = title;
+				_text = message;
+				this._cb1 = btnCB;
+				
+				var okBtn:Button = new Button();
+				okBtn.label = "OK";
+				this._btns.push(okBtn);
+				okBtn.addEventListener(MouseEvent.CLICK, this.onClickBtn1);
+			}
+
+
+			public function init2Btn(title:String, message:String, btn1:String, btn2:String, cb1:Function, cb2:Function):void
+			{
+				this.title = title;
+				_text = message;
+				this._cb1 = cb1;
+				this._cb2 = cb2;
+				
+				var btn:Button = new Button();
+				btn.label = btn1;
+				this._btns.push(btn);
+				btn.addEventListener(MouseEvent.CLICK, this.onClickBtn1);
+
+				btn = new Button();
+				btn.label = btn2;
+				this._btns.push(btn);
+				btn.addEventListener(MouseEvent.CLICK, this.onClickBtn2);
+			}
+
+
+			
+			private function addButtons():void
+			{
+				for each (var btn:Button in this._btns)
+					this.buttons.addChild(btn);
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+</MYMDialog>

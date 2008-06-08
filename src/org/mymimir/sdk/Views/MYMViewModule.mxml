@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" width="100%" height="100%" implements="org.mymimir.sdk.Views.IMYMViewModule">
+	
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.messaging.AbstractConsumer;
+			import org.mymimir.sdk.Events;
+			import org.mymimir.sdk.Components.ViewSetupInterface;
+			import mx.controls.Button;
+			import mx.containers.Canvas;
+			import mx.events.ResizeEvent;
+			import mx.managers.PopUpManager;
+			import org.mymimir.sdk.Modules.MYMModule;
+			import org.mymimir.sdk.IWikiPage;
+			import org.mymimir.sdk.IApplication;
+			import mx.core.UIComponent;
+			import org.mymimir.sdk.IWiki;
+
+			protected var aaaaaaid:String;
+			protected var _protocols:Array = new Array();
+			protected var _title:String;
+			protected var _lastHandledLocation:String;
+			protected var _app:IApplication;
+			protected var _displayed:Boolean;
+			protected var _description:XML;
+			protected var _wiki:IWiki;
+
+
+			/*** IPSYModule Interface functions
+			/**************************************************************************************/
+			public function cleanUp():void
+			{
+				
+			}
+			
+			public function handlePaste():Boolean
+			{
+				return false;
+			}
+
+			public function handleCopy():Boolean
+			{
+				return false;
+			}
+	
+			public function handleCut():Boolean
+			{
+				return false;
+			}
+	
+			public function handleSelectAll():Boolean
+			{
+				return false;
+			}
+
+
+
+			/*** IPSYURLHandler Interface functions
+			/**************************************************************************************/
+			
+			public function canHandleLocation(location:String):Boolean
+			{
+				return this.checkProtocol(location);
+			}
+			
+			public function handleLocation(location:String):Boolean
+			{
+				return false;
+			}
+			
+			
+			protected function getProtocol(location:String):String
+			{
+				if (!location) return null;
+				var regP:RegExp = /(^\w+:\/\/).+/;
+				var protocol:String = location.replace(regP, "$1");
+				
+				return protocol;
+			}
+			
+			protected function checkProtocol(location:String):Boolean
+			{
+				var protocol:String = this.getProtocol(location);
+				return (this._protocols.indexOf(protocol) != -1);
+			}
+			
+			public function get supportedProtocols():Array
+			{
+				return this._protocols;
+			}
+			
+			
+
+			/*** IPSYView Interface functions
+			/**************************************************************************************/
+	
+			public function init(app:IApplication, description:XML):void
+			{
+				this._description = description;
+				this._app = app;
+				this._protocols = new Array();
+				this.percentHeight = this.percentWidth = 100;
+				
+				this.aaaaaaid = org.mymimir.sdk.Tools.getStringFromXMLAttribute(description, "id");
+				var title:String = org.mymimir.sdk.Tools.getStringFromXMLAttribute(description, "title");			
+				if (!title) 
+				{
+					if (!this._title) this._title = "Generic View";
+				}
+				else this._title = title;
+				
+				org.mymimir.sdk.Tools.setWidthFromAttribute(this, description, "width");
+				this.addEventListener(mx.events.ResizeEvent.RESIZE, onResize);
+			}		
+			
+						
+			public function dispose():void
+			{
+			}
+		
+			
+			public function get component():UIComponent
+			{
+				return null;
+			}
+			
+			public function set wiki(wiki:IWiki):void
+			{
+				this._wiki = wiki;
+			}
+			
+			public function get title():String
+			{
+				return _title;
+			}
+			
+			public function get description():XML
+			{
+				return this._description;
+			}
+			
+			public function get displayed():Boolean
+			{
+				return this._displayed;
+			}
+			
+			public function get wikiPage():IWikiPage
+			{
+				return null;
+			}
+			
+			public function doOnLeave():void
+			{
+				this._displayed = false;				
+			}
+			
+			public function doOnEnter():void
+			{
+				this._displayed = true;				
+			}
+			
+			public function viewAdded(view:IMYMView, parent:UIComponent):void
+			{
+			}
+
+			private function onResize(ev:Event):void
+			{
+				this._description.@width = this.percentWidth.toString() + "%";
+				this._description.@height = this.percentHeight.toString() + "%";
+			}
+			
+			
+			
+			
+					
+			public function enableViewSetupMode():void
+			{
+				createSetupInterface();				
+			}
+			
+			public function disableViewSetupMode():void
+			{
+				
+			}
+
+			
+			
+			private var _viewSetupInterface:ViewSetupInterface;
+			
+			private function createSetupInterface():void
+			{
+				if (this._viewSetupInterface) return;
+				
+				this._viewSetupInterface = new ViewSetupInterface();
+				this._viewSetupInterface.init(this);
+				this._viewSetupInterface.addEventListener(org.mymimir.sdk.Events.VIEWSETUP_FINISH, onViewsetupFinish);
+				
+				this.addChild(this._viewSetupInterface);				
+			}
+			
+			private function onViewsetupFinish(ev:Event):void
+			{
+				this._viewSetupInterface = null;
+				this.dispatchEvent(ev);
+			}
+					
+		]]>
+	</mx:Script>
+	
+	
+</mx:Module>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300">
+	
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.containers.HBox;
+			import mx.charts.BubbleChart;
+			import org.mymimir.sdk.Events;
+			import mx.controls.Button;
+			import mx.core.UIComponent;
+			import org.mymimir.sdk.Views.IMYMView;
+			
+			[Embed(source="Ressources/done_100.png")]
+			[Bindable] protected var imgDone100:Class;
+			
+			[Embed(source="Ressources/minus_100.png")]
+			[Bindable] protected var imgMinus100:Class;
+
+			[Embed(source="Ressources/move_down_100.png")]
+			[Bindable] protected var imgMoveDown100:Class;
+			
+			[Embed(source="Ressources/move_left_100.png")]
+			[Bindable] protected var imgMoveLeft100:Class;
+			
+			[Embed(source="Ressources/move_right_100.png")]
+			[Bindable] protected var imgMoveRight100:Class;
+			
+			[Embed(source="Ressources/move_up_100.png")]
+			[Bindable] protected var imgMoveUp100:Class;
+			
+			[Embed(source="Ressources/plus_100.png")]
+			[Bindable] protected var imgPlus100:Class;
+			
+			[Embed(source="Ressources/x_100.png")]
+			[Bindable] protected var imgX100:Class;
+			
+			[Embed(source="Ressources/done_50.png")]
+			[Bindable] protected var imgDone50:Class;
+			
+			[Embed(source="Ressources/minus_50.png")]
+			[Bindable] protected var imgMinus50:Class;
+
+			[Embed(source="Ressources/move_down_50.png")]
+			[Bindable] protected var imgMoveDown50:Class;
+			
+			[Embed(source="Ressources/move_left_50.png")]
+			[Bindable] protected var imgMoveLeft50:Class;
+			
+			[Embed(source="Ressources/move_right_50.png")]
+			[Bindable] protected var imgMoveRight50:Class;
+			
+			[Embed(source="Ressources/move_up_50.png")]
+			[Bindable] protected var imgMoveUp50:Class;
+			
+			[Embed(source="Ressources/plus_50.png")]
+			[Bindable] protected var imgPlus50:Class;
+			
+			[Embed(source="Ressources/x_50.png")]
+			[Bindable] protected var imgX50:Class;
+
+			[Embed(source="Ressources/done_25.png")]
+			[Bindable] protected var imgDone25:Class;
+			
+			[Embed(source="Ressources/minus_25.png")]
+			[Bindable] protected var imgMinus25:Class;
+
+			[Embed(source="Ressources/move_down_25.png")]
+			[Bindable] protected var imgMoveDown25:Class;
+			
+			[Embed(source="Ressources/move_left_25.png")]
+			[Bindable] protected var imgMoveLeft25:Class;
+			
+			[Embed(source="Ressources/move_right_25.png")]
+			[Bindable] protected var imgMoveRight25:Class;
+			
+			[Embed(source="Ressources/move_up_25.png")]
+			[Bindable] protected var imgMoveUp25:Class;
+			
+			[Embed(source="Ressources/plus_25.png")]
+			[Bindable] protected var imgPlus25:Class;
+			
+			[Embed(source="Ressources/x_25.png")]
+			[Bindable] protected var imgX25:Class;
+			
+			private var _view:IMYMView;
+			
+			public function init(parent:IMYMView):void
+			{
+				this._view = parent;
+				
+				var uiComp:UIComponent = parent as UIComponent;
+				
+				if (uiComp)
+				{
+					this.width = uiComp.width;
+					this.height = uiComp.height;
+					this.createInterface();
+				}
+			}
+			
+			
+			protected function createInterface():void
+			{
+				var canv:Canvas = new Canvas();
+				canv.width = this.width;
+				canv.height = this.height;
+				canv.alpha = 0.6;
+				canv.setStyle("backgroundColor", 0x000000);
+				this..addChild(canv);
+				
+				
+				
+				var hbox:HBox = new HBox();
+				this.addChild(hbox);
+				
+				
+				
+				var hbox2: HBox = new HBox();
+				var button:Button; 
+				
+				hbox.addChild(hbox2);
+				button = this.createButton(this.imgDone50, 50, 50);
+				button.addEventListener(MouseEvent.CLICK, onClose);
+				hbox2.addChild(button);
+
+
+				hbox2 = new HBox();
+				hbox2.setStyle("horizontalGap", 2);
+				hbox.addChild(hbox2);
+				
+				button = this.createButton(this.imgMoveLeft50, 50, 50);
+				button.addEventListener(MouseEvent.CLICK, onMoveLeft);
+				hbox2.addChild(button);
+				button = this.createButton(this.imgMoveRight50, 50, 50);
+				button.addEventListener(MouseEvent.CLICK, onMoveRight);
+				hbox2.addChild(button);
+				button = this.createButton(this.imgMoveUp50, 50, 50);
+				button.addEventListener(MouseEvent.CLICK, onMoveUp);
+				hbox2.addChild(button);
+				button = this.createButton(this.imgMoveDown50, 50, 50);
+				button.addEventListener(MouseEvent.CLICK, onMoveDown);
+				hbox2.addChild(button);
+
+				hbox2 = new HBox();
+				hbox2.setStyle("horizontalGap", 2);
+				hbox.addChild(hbox2);
+				
+				button = this.createButton(this.imgMinus50, 50, 50);
+				button.addEventListener(MouseEvent.CLICK, onRemove);
+				hbox2.addChild(button);
+			}
+			
+			
+			protected function createButton(icon:Class, width:Number = 100, height:Number = 100):Button
+			{
+				var clsButton:Button = new Button();
+				clsButton.label = "";
+				clsButton.width = width;
+				clsButton.height = height;
+				clsButton.setStyle("icon", icon);
+				clsButton.setStyle("fillAlphas", [0.2, 0.2]);
+				clsButton.alpha = 1.0;				
+				
+				return clsButton;
+			}
+			
+			
+			protected function onClose(ev:Event):void
+			{
+				var uiComp:UIComponent = parent as UIComponent;
+				
+				if (uiComp)
+					uiComp.removeChild(this);
+
+				this.dispatchEvent(new Event(org.mymimir.sdk.Events.VIEWSETUP_FINISH));
+			}
+			
+			
+			protected function onMoveLeft(ev:Event):void
+			{
+				var mev:MouseEvent = new MouseEvent(org.mymimir.sdk.Events.VIEWSETUP_MOVE_LEFT);
+				mev.relatedObject = this.parent;
+				this.dispatchEvent(mev);
+			}
+			
+			protected function onMoveRight(ev:Event):void
+			{
+				var mev:MouseEvent = new MouseEvent(org.mymimir.sdk.Events.VIEWSETUP_MOVE_RIGHT);
+				mev.relatedObject = this.parent;
+				this.dispatchEvent(mev);
+			}
+			
+			protected function onMoveUp(ev:Event):void
+			{
+				var mev:MouseEvent = new MouseEvent(org.mymimir.sdk.Events.VIEWSETUP_MOVE_UP);
+				mev.relatedObject = this.parent;
+				this.dispatchEvent(mev);
+			}
+
+			protected function onMoveDown(ev:Event):void
+			{
+				var mev:MouseEvent = new MouseEvent(org.mymimir.sdk.Events.VIEWSETUP_MOVE_DOWN);
+				mev.relatedObject = this.parent;
+				this.dispatchEvent(mev);
+			}
+
+			protected function onRemove(ev:Event):void
+			{
+				var mev:MouseEvent = new MouseEvent(org.mymimir.sdk.Events.VIEWSETUP_CLOSE_VIEW);
+				mev.relatedObject = this.parent;
+				this.dispatchEvent(mev);
+			}
+
+
+		]]>
+	</mx:Script>
+	
+	
+</mx:Canvas>

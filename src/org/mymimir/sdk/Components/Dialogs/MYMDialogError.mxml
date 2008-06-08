@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MYMDialog xmlns="org.mymimir.sdk.Components.Dialogs.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="332" title="An error occured" backgroundColor="#ECECEC" fontSize="20" borderColor="#FF0404" alpha="1.0">
+	
+	<mx:Script>
+		<![CDATA[
+			[Bindable] private var _message:String;
+			[Bindable] private var _info:String;
+		
+			public function set message(message:String):void
+			{
+				this._message = message;
+			}
+			
+			
+			public function set additional(info:String):void
+			{
+				this._info = info;
+			}
+			
+			override public function popUpModal(parent:DisplayObject):void
+			{
+				super.popUpModal(parent);
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:VBox top="10" left="10" right="10" bottom="10" horizontalAlign="right">
+		<mx:TextArea text="{_message}" width="100%" backgroundAlpha="0.0" fontWeight="bold" fontSize="12" height="100%" editable="false" id="txtMessage"/>
+		<mx:TextArea text="{_info}" id="txtInfo" width="100%" editable="false" height="100%" fontSize="12"/>
+		<mx:Button label="OK" click="close()" fontSize="10"/>
+	</mx:VBox>
+	
+</MYMDialog>
